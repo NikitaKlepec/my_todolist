@@ -1,29 +1,19 @@
 import React from 'react';
 import './App.css';
+import TodoListTask from "./TodoListTask";
+import {PropsTasksType} from "./App";
 
-class TodoListTasks extends React.Component {
-    render = () => {
-        return (
-            <div className="todoList-tasks">
-                <div className="todoList-task">
-                    <input type="checkbox" checked={true}/>
-                    <span>CSS</span>
-                </div>
-                <div className="todoList-task">
-                    <input type="checkbox" checked={false}/>
-                    <span>JS</span>
-                </div>
-                <div className="todoList-task">
-                    <input type="checkbox" checked={false}/>
-                    <span>ReactJS</span>
-                </div>
-                <div className="todoList-task">
-                    <input type="checkbox" checked={true}/>
-                    <span>Patterns</span>
-                </div>
-            </div>
-        );
-    }
+
+function TodoListTasks(props: PropsTasksType) {
+    let taskElement=props.tasks.map(task=>
+        <TodoListTask title={task.title} isDone={task.isDone} priority={task.priority}/>)
+
+    return (
+        <div className="todoList-tasks">
+            {taskElement}
+        </div>
+    )
 }
 
 export default TodoListTasks;
+
