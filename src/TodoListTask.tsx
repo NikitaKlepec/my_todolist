@@ -10,9 +10,10 @@ type PropsTask = {
 
 
 function TodoListTask(props: PropsTask) {
-
+    debugger
+   let isDone=props.isDone?"todoList-task done":"todoList-task"
     return (
-        <div className="todoList-task">
+        <div className={isDone}>
             <input type="checkbox" checked={props.isDone}/>
             <span>{props.title}</span>, <span>priority:  {props.priority}</span>
         </div>
