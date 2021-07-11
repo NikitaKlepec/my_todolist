@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ChangeEvent} from 'react';
 import './App.css';
 
 type TodoListFooterType = {
@@ -16,7 +16,7 @@ class TodoListHeader extends React.Component<TodoListFooterType> {
 
 
     onAddTaskTitle = () => {
-        debugger
+
         let titleTask = this.state.title;
         this.state.title = '';
         if (titleTask === '') {
@@ -29,7 +29,7 @@ class TodoListHeader extends React.Component<TodoListFooterType> {
 
     }
 
-    onTitleChanged = (e: any) => {
+    onTitleChanged = (e: ChangeEvent<HTMLInputElement>) => {
         this.setState({
             error: false,
             title: e.currentTarget.value
