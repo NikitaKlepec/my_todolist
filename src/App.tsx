@@ -1,140 +1,95 @@
-import React from 'react';
+import React from "react";
 import './App.css';
-import TodoListHeader from "./TodoListHeader";
-import TodoListTasks from "./TodoListTasks";
-import TodoListFooter from "./TodoListFooter";
+import TodoList from "./TodoList";
+import AddNewItemForm from "./AddNewItemForm";
 
 
-export  type ObjectTasksType = {
-    id:number
-    title: string
-    isDone: boolean
-    priority: string
+
+
+
+type ObjTodoListsType={
+    id:number,
+    title:string
 }
 
-export type PropsTasksType = {
-    tasks: Array<ObjectTasksType>
-    changeStatus:(id:number,isDone:boolean)=>void
-    changeTitle:(id:number,title:string)=>void
-
+type StateTodoListType={
+    todolist:Array<ObjTodoListsType>
 }
-
-type StateType = {
-    tasks: Array<ObjectTasksType>
-    filterValue: string
-}
-
-type ObjType={
-    isDone?:boolean
-    title?:string
-}
-
 
 class App extends React.Component {
-
     componentDidMount() {
         this.restoreState()
     }
 
-    state: StateType = {
-        tasks: [
-            // {id:0,title: "CSS", isDone: true, priority: "low"},
-            // {id:1,title: "Html", isDone: false, priority: "high"},
-            // {id:2,title: "Js", isDone: true, priority: "medium"},
-            // {id:3,title: "React", isDone: false, priority: "low"}
-        ],
-        filterValue: "All"
+    state:StateTodoListType = {
+        todolist: [
+            // {id: 1, title: "Learn React"},
+            // {id: 2, title: "Learn Javascript"},
+            // {id: 3, title: "Learn CSS"}
+        ]
     }
-
-    nextTaskId=0
 
     saveState=()=>{
         let stateAsString=JSON.stringify(this.state)
-        localStorage.setItem("our-state",stateAsString)
+        localStorage.setItem("todolist-state",stateAsString)
     }
 
     restoreState=()=>{
         let state={
-            tasks:[],
-            filterValue: "All"
+            todolist:[],
+
         }
-        let stateAsString=localStorage.getItem("our-state")
-        if(stateAsString!=null){
+        let stateAsString=localStorage.getItem("todolist-state")
+        if(stateAsString !=null){
             state=JSON.parse(stateAsString)
         }
         this.setState(state,()=>{
-            this.state.tasks.forEach(task=>{
-                if(task.id>=this.nextTaskId){
-                    this.nextTaskId=task.id+1
+            this.state.todolist.forEach(task=>{
+                if(task.id>=this.nextTodoListId){
+                    this.nextTodoListId=task.id+1
                 }
             })
         })
     }
 
-    addTaskClick = (titleTask:string) => {
-        let newTask = {
-            id:this.nextTaskId,
-            title: titleTask,
-            isDone: false,
-            priority: "high"
+    // addItemClick = (titleTask:string) => {
+    //     let newTask = {
+    //         id:this.nextTaskId,
+    //         title: titleTask,
+    //         isDone: false,
+    //         priority: "high"
+    //     }
+    //     let newTasks = [...this.state.tasks, newTask]
+    //     this.setState({
+    //         tasks: newTasks
+    //     },()=>{this.saveState()})
+    //     this.nextTaskId++
+    //
+    // }
+     nextTodoListId=0
+
+    addTodoList=(title:string)=>{
+        let newTodoList={
+            id:this.nextTodoListId,
+            title:title
         }
-        let newTasks = [...this.state.tasks, newTask]
-        this.setState({
-            tasks: newTasks
-        },()=>{this.saveState()})
-        this.nextTaskId++
-
-    }
-    changeFilter=(newFilterValue:string)=>{
-        this.setState({
-            filterValue:newFilterValue
-        })
+        let newTodoLists=[...this.state.todolist,newTodoList]
+        this.setState({todolist:newTodoLists},()=>{this.saveState()})
+        this.nextTodoListId++
     }
 
-    changeTask=(id:number,obj:ObjType)=>{
-        let newTasks=this.state.tasks.map(tas=>{
-            if (tas.id!=id){
-                return tas
-            } else{
-                return {...tas,...obj}
-            }
-        })
-        this.setState({
-            tasks:newTasks
-        })
-    }
-
-    changeStatus=(id:number,isDone:boolean)=>{
-       this.changeTask(id,{isDone})
-    }
-
-    changeTitle=(id:number,title:string)=>{
-        this.changeTask(id,{title})
-    }
-
-    render = () => {
-
+    render() {
+        let todoLists = this.state.todolist.map(td => <TodoList id={td.id} title={td.title}/>)
         return (
-            <div className="App">
-                <div className="todoList">
-                    <TodoListHeader addTaskClick={this.addTaskClick}/>
-                    <TodoListTasks tasks={this.state.tasks.filter(task=>{
-                        if(this.state.filterValue==="All"){
-                            return true
-                        }
-                        if(this.state.filterValue==="Completed"){
-                            return task.isDone===true
-                        }
-                        if(this.state.filterValue==="Active"){
-                            return task.isDone===false
-                        }
-                    })}
-                                   changeStatus={this.changeStatus}
-                                   changeTitle={this.changeTitle}/>
-                    <TodoListFooter filterValue={this.state.filterValue} changeFilter={this.changeFilter}/>
+            <>
+                <div>
+                   <AddNewItemForm addItem={this.addTodoList}/>
                 </div>
-            </div>
-        );
+                <div className={"App"}>
+                    {todoLists}
+                </div>
+            </>
+        )
     }
 }
 

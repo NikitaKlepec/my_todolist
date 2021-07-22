@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import TodoListTask from "./TodoListTask";
-import {PropsTasksType} from "./App";
+import {PropsTasksType} from "./TodoList";
 
 
 function TodoListTasks(props: PropsTasksType) {
